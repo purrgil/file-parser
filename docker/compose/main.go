@@ -13,6 +13,10 @@ type DockerCompose struct {
 }
 
 func (dc *DockerCompose) AddService(name string, service DockerComposeService) {
+	if len(dc.Services) == 0 {
+		dc.Services = make(map[string]DockerComposeService)
+	}
+
 	dc.Services[name] = service
 }
 

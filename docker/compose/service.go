@@ -36,3 +36,7 @@ func (dcs *DockerComposeService) PushDep(dep string) {
 func (dcs *DockerComposeService) PushLink(link string) {
 	dcs.Links = append(dcs.Links, link)
 }
+
+func NewService() DockerComposeService {
+	return DockerComposeService{}
+}
