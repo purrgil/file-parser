@@ -8,8 +8,8 @@ type DockerCompose struct {
 	path     string
 	Version  int                             `yaml:"version"`
 	Services map[string]DockerComposeService `yaml:"services,omitempty"`
-	Volumes  []string                        `yaml:"volumes,omitempty"`
-	Network  map[string]DockerComposeNetwork `yaml:"networks,omitempty"`
+	Volumes  map[string]DockerComposeVolume  `yaml:"volumes,omitempty"`
+	Networks map[string]DockerComposeNetwork `yaml:"networks,omitempty"`
 }
 
 func (dc *DockerCompose) AddService(name string, service DockerComposeService) {
@@ -20,12 +20,20 @@ func (dc *DockerCompose) AddService(name string, service DockerComposeService) {
 	dc.Services[name] = service
 }
 
-func (dc *DockerCompose) AddVolume(namedVolume string) {
-	dc.Volumes = append(dc.Volumes, namedVolume)
+func (dc *DockerCompose) AddVolume(name string, volume DockerComposeVolume) {
+	if len(dc.Volumes) == 0 {
+		dc.Volumes = make(map[string]DockerComposeVolume)
+	}
+
+	dc.Volumes[name] = volume
 }
 
 func (dc *DockerCompose) AddNetwork(name string, network DockerComposeNetwork) {
-	dc.Network[name] = network
+	if len(dc.Networks) == 0 {
+		dc.Networks = make(map[string]DockerComposeNetwork)
+	}
+
+	dc.Networks[name] = network
 }
 
 func (dc *DockerCompose) ParseToByte() ([]byte, error) {
