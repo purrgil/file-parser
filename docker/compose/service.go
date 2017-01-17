@@ -1,7 +1,12 @@
 package compose
 
+type ServiceBuild struct {
+	Context    string
+	Dockerfile string
+}
+
 type DockerComposeService struct {
-	Build            string            `yaml:"build,omitempty"`
+	Build            ServiceBuild      `yaml:"build,omitempty"`
 	CapabilitiesAdd  []string          `yaml:"cap_add, omitempty"`
 	CapabilitiesDrop []string          `yaml:"cap_drop, omitempty"`
 	Command          string            `yaml:"command,omitempty"`

@@ -1,8 +1,8 @@
 package compose
 
 import (
-	"testing"
 	"reflect"
+	"testing"
 )
 
 const testName string = "test_name"
@@ -30,7 +30,7 @@ func TestAddVolume(t *testing.T) {
 	if !reflect.DeepEqual(dc.Volumes[testName], testVolume) {
 		t.Error(
 			"Expected volumes", testVolume,
-			"but got",	dc.Volumes[testName],
+			"but got", dc.Volumes[testName],
 		)
 	}
 }
@@ -45,6 +45,40 @@ func TestAddService(t *testing.T) {
 		t.Error(
 			"Expected services", testService,
 			"but got", dc.Services[testName],
+		)
+	}
+}
+
+func TestParseToString(t *testing.T) {
+	dc := NewDockerCompose()
+
+	b, _ := dc.ParseToByte()
+	s, _ := dc.ParseToString()
+
+	if string(b) != s {
+		t.Error(
+			"Expected", string(b),
+			"got", s,
+		)
+	}
+}
+
+func TestParseToDockerCompose(t *testing.T) {
+	myByteDocker := []byte(`
+		version: "2"
+		services:
+			test:
+				build:
+					context: ./
+					dockerfile: Dockerfile.dev
+	`)
+
+	dc, _ := ParseToDockerCompose(myByteDocker)
+
+	if dc.Services["test"].Build.Context == "./" {
+		t.Error(
+			"Expected service[test]", "./",
+			"got", dc.Services["test"].Build.Context,
 		)
 	}
 }
