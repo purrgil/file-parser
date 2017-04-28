@@ -21,26 +21,22 @@ func (f *File) GetFilePath() string {
 	return basePath
 }
 
-func (f *File) SaveFile() {
+func (f *File) SaveFile() error {
 	path := f.GetFilePath()
-	err := ioutil.WriteFile(path, f.Content, 0777)
-
-	if err != nil {
-		panic(err)
-	}
+	return ioutil.WriteFile(path, f.Content, 0777)
 }
 
-func LoadFile(dir string, title string, ext string) File {
+func LoadFile(dir string, title string, ext string) (File, error) {
 	fileInstance := NewFile(dir, title, ext)
 	Content, err := ioutil.ReadFile(fileInstance.GetFilePath())
 
 	if err != nil {
-		panic(err)
+		return File{}, err
 	}
 
 	fileInstance.Content = Content
 
-	return fileInstance
+	return fileInstance, nil
 }
 
 func NewFile(dir string, title string, ext string) File {
